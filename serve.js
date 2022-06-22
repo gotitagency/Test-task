@@ -41,6 +41,22 @@ app.get('/userbyid/:uid', (req, res) => {
     res.send(users.find(user => user.id == req.params.uid));
 })
 
+
+app.put('/updateuser/:uid', (req, res) => {
+    let users = JSON.parse(fs.readFileSync('users.json'));
+    users = users.map(user => {
+        if(user.id == req.params.uid){
+            user.name = req.body.name;
+            user.phoneNumbers = req.body.phoneNumbers;
+        }
+        return user;
+    });
+    fs.writeFile('users.json', JSON.stringify(users),()=>{
+        res.send('User updated successfully')
+    });
+})
+
+
 app.post('/adduser', (req, res) => {
     let users = JSON.parse(fs.readFileSync('users.json'));
     users.push({
